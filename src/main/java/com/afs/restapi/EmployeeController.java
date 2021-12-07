@@ -51,7 +51,7 @@ public class EmployeeController {
     if (updatedEmployee.getSalary() != null) {
       employee.setSalary(updatedEmployee.getSalary());
     }
-    return employeeRepository.save(id, updatedEmployee);
+    return employeeRepository.save(id, employee);
   }
 
   @DeleteMapping("/{id}")
