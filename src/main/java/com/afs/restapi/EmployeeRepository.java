@@ -48,4 +48,9 @@ public class EmployeeRepository {
     employees.add(updatedEmployee);
     return updatedEmployee;
   }
+
+  public boolean delete(Integer id) {
+    Employee employee = findById(id);
+    return employees.remove(employee);
+  }
 }
