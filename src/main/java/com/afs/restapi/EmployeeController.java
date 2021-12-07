@@ -29,4 +29,9 @@ public class EmployeeController {
     return employeeRepository.findByGender(gender);
   }
 
+  @PostMapping
+  public Employee createEmployee(@RequestBody Employee employee) {
+    return employeeRepository.create(employee);
+  }
+
 }
