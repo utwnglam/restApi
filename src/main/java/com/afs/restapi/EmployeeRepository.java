@@ -12,6 +12,10 @@ public class EmployeeRepository {
 
   public EmployeeRepository() {
     employees.add(new Employee(1, "who", 20, "Female", 10000));
+    employees.add(new Employee(2, "wh", 20, "Female", 10000));
+    employees.add(new Employee(3, "wo", 20, "Female", 10000));
+    employees.add(new Employee(4, "someWho", 20, "Female", 10000));
+    employees.add(new Employee(5, "whoHi", 20, "Male", 10000));
   }
 
   public List<Employee> findAll() {
@@ -47,6 +51,13 @@ public class EmployeeRepository {
     employees.remove(employee);
     employees.add(updatedEmployee);
     return updatedEmployee;
+  }
+
+  public List<Employee> findByPageNumber(Integer page, Integer pageSize) {
+    return employees.stream()
+      .skip((long) page * pageSize)
+      .limit((long) pageSize)
+      .collect(Collectors.toList());
   }
 
   public boolean delete(Integer id) {
