@@ -10,13 +10,7 @@ import java.util.stream.Collectors;
 public class EmployeeRepository {
   private List<Employee> employees = new ArrayList<>();
 
-  public EmployeeRepository() {
-    employees.add(new Employee(1, "who", 20, "Female", 10000));
-    employees.add(new Employee(2, "wh", 20, "Female", 10000));
-    employees.add(new Employee(3, "wo", 20, "Female", 10000));
-    employees.add(new Employee(4, "someWho", 20, "Female", 10000));
-    employees.add(new Employee(5, "whoHi", 20, "Male", 10000));
-  }
+  public EmployeeRepository() {}
 
   public List<Employee> findAll() {
     return employees;
@@ -56,12 +50,16 @@ public class EmployeeRepository {
   public List<Employee> findByPageNumber(Integer page, Integer pageSize) {
     return employees.stream()
       .skip((long) page * pageSize)
-      .limit((long) pageSize)
+      .limit(pageSize)
       .collect(Collectors.toList());
   }
 
-  public boolean delete(Integer id) {
+  public void delete(Integer id) {
     Employee employee = findById(id);
-    return employees.remove(employee);
+    employees.remove(employee);
+  }
+
+  public void clearAll() {
+    employees.clear();
   }
 }

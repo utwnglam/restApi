@@ -8,8 +8,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/employees")
 public class EmployeeController {
-  public static final String SUCCESSFULLY_DELETE_MESSAGE = "Successfully delete";
-  public static final String CANNOT_DELETE_MESSAGE = "Cannot delete";
+//  public static final String SUCCESSFULLY_DELETE_MESSAGE = "Successfully delete";
+//  public static final String CANNOT_DELETE_MESSAGE = "Cannot delete";
   private EmployeeRepository employeeRepository;
 
   public EmployeeController(EmployeeRepository employeeRepository) {
@@ -45,10 +45,10 @@ public class EmployeeController {
   @PutMapping("/{id}")
   public Employee editEmployee(@PathVariable Integer id, @RequestBody Employee updatedEmployee) {
     Employee employee = employeeRepository.findById(id);
-    if (updatedEmployee.getAge() != null) {
+    if (updatedEmployee.getAge() != null) {   //  !.equals(0)
       employee.setAge(updatedEmployee.getAge());
     }
-    if (updatedEmployee.getSalary() != null) {
+    if (updatedEmployee.getSalary() != null) {  //  !.equals(0)
       employee.setSalary(updatedEmployee.getSalary());
     }
     return employeeRepository.save(id, employee);
@@ -56,8 +56,7 @@ public class EmployeeController {
 
   @DeleteMapping("/{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public String deleteEmployee(@PathVariable Integer id) {
-    boolean isSuccessful = employeeRepository.delete(id);
-    return isSuccessful ? SUCCESSFULLY_DELETE_MESSAGE : CANNOT_DELETE_MESSAGE;
+  public void deleteEmployee(@PathVariable Integer id) {
+    employeeRepository.delete(id);
   }
 }
