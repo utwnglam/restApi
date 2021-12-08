@@ -7,6 +7,8 @@ import org.mockito.Mock;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -58,6 +60,12 @@ public class EmployeeServiceTest {
 
   @Test
   public void should_return_employee_when_get_given_gender() {
+    Employee employee = new Employee(1, "Terence", 29, "Male", 66666);
+    List<Employee> employees = Collections.singletonList(employee);
+    given(mockEmployeeRepository.findByGender("Male"))
+      .willReturn(employees);
 
+    List<Employee> actual = employeeService.findByGender(employee.getGender());
+    assertEquals(employees, actual);
   }
 }
