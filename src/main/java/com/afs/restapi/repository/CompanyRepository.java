@@ -11,10 +11,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Repository
-public class CompanyDatabase {
+public class CompanyRepository {
   private List<Company> companies = new ArrayList<>();
 
-  public CompanyDatabase() {
+  public CompanyRepository() {
     companies.add(new Company(1, "comm",
       Arrays.asList(new Employee(1, "who", 20, "Female", 10000), new Employee(2, "wh", 20, "Female", 10000))
     ));

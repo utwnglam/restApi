@@ -2,7 +2,7 @@ package com.afs.restapi;
 
 import com.afs.restapi.entity.Company;
 import com.afs.restapi.entity.Employee;
-import com.afs.restapi.repository.CompanyDatabase;
+import com.afs.restapi.repository.CompanyRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +24,11 @@ public class CompanyControllerTest {
   @Autowired
   MockMvc mockMvc;
   @Autowired
-  CompanyDatabase companyDatabase;
+  CompanyRepository companyRepository;
 
   @BeforeEach
   void cleanRepository() {
-    companyDatabase.clearAll();
+    companyRepository.clearAll();
   }
 
   @Test
@@ -37,7 +37,7 @@ public class CompanyControllerTest {
       Arrays.asList(new Employee(1, "Terence", 29, "Male", 66666),
         new Employee(2, "wh", 20, "Female", 10000))
     );
-    companyDatabase.create(company);
+    companyRepository.create(company);
 
     mockMvc.perform(MockMvcRequestBuilders.get(COMPANIES_URL_BASE))
       .andExpect(status().isOk())
