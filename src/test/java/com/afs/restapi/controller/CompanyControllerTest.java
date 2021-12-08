@@ -13,6 +13,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.Arrays;
 
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -43,6 +44,31 @@ public class CompanyControllerTest {
       .andExpect(status().isOk())
       .andExpect(jsonPath("$", hasSize(1)))
       .andExpect(jsonPath("$[0].id").isNumber())
-      .andExpect(jsonPath("$[0].companyName").value("comm"));
+      .andExpect(jsonPath("$[0].companyName").value("comm"))
+      .andExpect(jsonPath("$[0].employees[*].name").value(containsInAnyOrder("Terence", "wh")))
+      .andExpect(jsonPath("$[0].employees[*].age").value(containsInAnyOrder(20, 29)))
+      .andExpect(jsonPath("$[0].employees[*].gender").value(containsInAnyOrder("Female", "Male")))
+      .andExpect(jsonPath("$[0].employees[*].salary").value(containsInAnyOrder(10000, 66666)));
   }
+
+  @Test
+  void should_return_company_when_perform_get_given_id() throws Exception {
+    //given
+    Company company = new Company(1, "comm",
+      Arrays.asList(new Employee(1, "Terence", 29, "Male", 66666),
+        new Employee(2, "wh", 20, "Female", 10000))
+    );
+    companyRepository.create(company);
+
+    mockMvc.perform(MockMvcRequestBuilders.get(COMPANIES_URL_BASE + "/" + company.getId()))
+      .andExpect(status().isOk())
+      .andExpect(jsonPath("$.id").isNumber())
+      .andExpect(jsonPath("$.companyName").value("comm"))
+      .andExpect(jsonPath("$.employees[*].name").value(containsInAnyOrder("Terence", "wh")))
+      .andExpect(jsonPath("$.employees[*].age").value(containsInAnyOrder(20, 29)))
+      .andExpect(jsonPath("$.employees[*].gender").value(containsInAnyOrder("Female", "Male")))
+      .andExpect(jsonPath("$.employees[*].salary").value(containsInAnyOrder(10000, 66666)));
+  }
+
+  
 }
