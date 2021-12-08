@@ -16,17 +16,6 @@ public class EmployeeService {
     return employeeRepository.findAll();
   }
 
-  public Employee edit(Integer id, Employee updatedEmployee) {
-    Employee employee = employeeRepository.findById(id);
-    if (updatedEmployee.getAge() != null) {   //  !.equals(0)
-      employee.setAge(updatedEmployee.getAge());
-    }
-    if (updatedEmployee.getSalary() != null) {  //  !.equals(0)
-      employee.setSalary(updatedEmployee.getSalary());
-    }
-    return employeeRepository.save(id, employee);
-  }
-
   public Employee findById(Integer id) {
     return employeeRepository.findById(id);
   }
@@ -36,11 +25,22 @@ public class EmployeeService {
   }
 
   public List<Employee> findByPage(Integer page, Integer pageSize) {
-    return employeeRepository.findByPageNumber(page,pageSize);
+    return employeeRepository.findByPageNumber(page, pageSize);
   }
 
   public Employee create(Employee employee) {
     return employeeRepository.create(employee);
+  }
+
+  public Employee edit(Integer id, Employee updatedEmployee) {
+    Employee employee = employeeRepository.findById(id);
+    if (updatedEmployee.getAge() != null && !updatedEmployee.getAge().equals(0)) {
+      employee.setAge(updatedEmployee.getAge());
+    }
+    if (updatedEmployee.getSalary() != null && !updatedEmployee.getSalary().equals(0)) {
+      employee.setSalary(updatedEmployee.getSalary());
+    }
+    return employeeRepository.save(id, employee);
   }
 
   public void delete(Integer id) {

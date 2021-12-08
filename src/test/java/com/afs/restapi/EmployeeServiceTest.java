@@ -94,7 +94,7 @@ public class EmployeeServiceTest {
   }
 
   @Test
-  public void should_return_null_when_delete_given_() {
+  public void should_return_null_list_when_delete_given_deleted_employee() {
     Employee employee = new Employee(1, "Terence", 29, "Male", 66666);
     given(mockEmployeeRepository.create(employee))
       .willReturn(employee);
