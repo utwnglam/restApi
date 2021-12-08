@@ -1,7 +1,6 @@
 package com.afs.restapi.controller;
 
 import com.afs.restapi.entity.Company;
-import com.afs.restapi.entity.Employee;
 import com.afs.restapi.repository.CompanyRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,8 +10,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-
-import java.util.Arrays;
 
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasSize;
@@ -35,10 +32,7 @@ public class CompanyControllerTest {
 
   @Test
   public void should_get_all_companies_when_GET_given_companies() throws Exception {
-    Company company = new Company(1, "comm",
-      Arrays.asList(new Employee(1, "Terence", 29, "Male", 66666),
-        new Employee(2, "wh", 20, "Female", 10000))
-    );
+    Company company = new Company(1, "comm");
     companyRepository.create(company);
 
     mockMvc.perform(MockMvcRequestBuilders.get(COMPANIES_URL_BASE))
@@ -55,10 +49,7 @@ public class CompanyControllerTest {
   @Test
   public void should_return_company_when_perform_get_given_id() throws Exception {
     //given
-    Company company = new Company(1, "comm",
-      Arrays.asList(new Employee(1, "Terence", 29, "Male", 66666),
-        new Employee(2, "wh", 20, "Female", 10000))
-    );
+    Company company = new Company(1, "comm");
     companyRepository.create(company);
 
     mockMvc.perform(MockMvcRequestBuilders.get(COMPANIES_URL_BASE + "/" + company.getId()))
@@ -74,14 +65,8 @@ public class CompanyControllerTest {
   @Test
   public void should_return_company_when_perform_get_given_page_and_page_size() throws Exception {
     //given
-    companyRepository.create(new Company(1, "comm",
-      Arrays.asList(new Employee(1, "Terence", 29, "Male", 66666),
-        new Employee(2, "wh", 20, "Female", 10000))
-    ));
-    companyRepository.create(new Company(2, "comm2",
-      Arrays.asList(new Employee(1, "Terence", 29, "Male", 66666),
-        new Employee(2, "wh", 20, "Female", 10000))
-    ));
+    companyRepository.create(new Company(1, "comm"));
+    companyRepository.create(new Company(2, "comm2"));
     //when
     mockMvc.perform(MockMvcRequestBuilders.get(COMPANIES_URL_BASE + "?page=1&pageSize=2"))
       .andExpect(status().isOk())
@@ -131,10 +116,7 @@ public class CompanyControllerTest {
 
   @Test
   public void should_return_edited_company_when_put_given_updated_employee() throws Exception {
-    Company company = new Company(1, "comm",
-      Arrays.asList(new Employee(1, "Terence", 29, "Male", 66666),
-        new Employee(2, "wh", 20, "Female", 10000))
-    );
+    Company company = new Company(1, "comm");
     companyRepository.create(company);
 
     String updatedCompanyJson = "{\n" +
@@ -168,10 +150,7 @@ public class CompanyControllerTest {
   @Test
   void should_delete_when_perform_delete_given_company_id() throws Exception {
     //given
-    Company company = new Company(1, "comm",
-      Arrays.asList(new Employee(1, "Terence", 29, "Male", 66666),
-        new Employee(2, "wh", 20, "Female", 10000))
-    );
+    Company company = new Company(1, "comm");
     companyRepository.create(company);
 
     mockMvc.perform(MockMvcRequestBuilders.delete(COMPANIES_URL_BASE + "/" + company.getId()))

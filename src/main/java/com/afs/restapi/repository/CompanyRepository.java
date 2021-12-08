@@ -6,7 +6,6 @@ import com.afs.restapi.exception.NoCompanyFoundException;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,15 +14,9 @@ public class CompanyRepository {
   private List<Company> companies = new ArrayList<>();
 
   public CompanyRepository() {
-    companies.add(new Company(1, "comm",
-      Arrays.asList(new Employee(1, "who", 20, "Female", 10000), new Employee(2, "wh", 20, "Female", 10000))
-    ));
-    companies.add(new Company(2, "comingCompany",
-      Arrays.asList(new Employee(1, "who2", 20, "Female", 10000), new Employee(2, "jane", 20, "Female", 10000))
-    ));
-    companies.add(new Company(3, "cannotFindCompany",
-      Arrays.asList(new Employee(1, "who3", 20, "Female", 1500), new Employee(2, "dearjane", 20, "Female", 10000))
-    ));
+    companies.add(new Company(1, "comm"));
+    companies.add(new Company(2, "comingCompany"));
+    companies.add(new Company(3, "cannotFindCompany"));
   }
 
   public List<Company> findAll() {

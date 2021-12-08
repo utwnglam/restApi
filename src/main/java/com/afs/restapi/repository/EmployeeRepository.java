@@ -31,6 +31,12 @@ public class EmployeeRepository {
       .collect(Collectors.toList());
   }
 
+  public List<Employee> findByCompanyId(Integer id) {
+    return employees.stream()
+      .filter(employee -> employee.getCompanyId().equals(id))
+      .collect(Collectors.toList());
+  }
+
   public Employee create(Employee employee) {
     int nextId = employees.stream()
       .mapToInt(Employee::getId)

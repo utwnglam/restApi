@@ -30,6 +30,10 @@ public class EmployeeService {
     return employeeRepository.findByPageNumber(page, pageSize);
   }
 
+  public List<Employee> findByCompanyId(Integer id) {
+    return employeeRepository.findByCompanyId(id);
+  }
+
   public Employee create(Employee employee) {
     return employeeRepository.create(employee);
   }

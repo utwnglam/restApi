@@ -7,10 +7,9 @@ public class Company {
   private String companyName;
   private List<Employee> employees;
 
-  public Company(Integer id, String companyName, List<Employee> employees) {
+  public Company(Integer id, String companyName) {
     this.id = id;
     this.companyName = companyName;
-    this.employees = employees;
   }
 
   public Integer getId() {
