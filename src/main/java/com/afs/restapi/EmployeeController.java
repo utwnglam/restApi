@@ -11,6 +11,7 @@ public class EmployeeController {
 //  public static final String SUCCESSFULLY_DELETE_MESSAGE = "Successfully delete";
 //  public static final String CANNOT_DELETE_MESSAGE = "Cannot delete";
   private EmployeeRepository employeeRepository;
+  private EmployeeService employeeService;
 
   public EmployeeController(EmployeeRepository employeeRepository) {
     this.employeeRepository = employeeRepository;
@@ -44,14 +45,7 @@ public class EmployeeController {
 
   @PutMapping("/{id}")
   public Employee editEmployee(@PathVariable Integer id, @RequestBody Employee updatedEmployee) {
-    Employee employee = employeeRepository.findById(id);
-    if (updatedEmployee.getAge() != null) {   //  !.equals(0)
-      employee.setAge(updatedEmployee.getAge());
-    }
-    if (updatedEmployee.getSalary() != null) {  //  !.equals(0)
-      employee.setSalary(updatedEmployee.getSalary());
-    }
-    return employeeRepository.save(id, employee);
+    return employeeService.edit(id, updatedEmployee);
   }
 
   @DeleteMapping("/{id}")
