@@ -1,5 +1,7 @@
 package com.afs.restapi;
 
+import com.afs.restapi.entity.Employee;
+import com.afs.restapi.repository.EmployeeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

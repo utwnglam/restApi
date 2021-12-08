@@ -1,5 +1,8 @@
 package com.afs.restapi;
 
+import com.afs.restapi.entity.Company;
+import com.afs.restapi.entity.Employee;
+import com.afs.restapi.repository.CompanyDatabase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
