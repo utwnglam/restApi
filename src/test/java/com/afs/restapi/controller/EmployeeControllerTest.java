@@ -1,4 +1,4 @@
-package com.afs.restapi;
+package com.afs.restapi.controller;
 
 import com.afs.restapi.entity.Employee;
 import com.afs.restapi.repository.EmployeeRepository;
@@ -41,7 +41,7 @@ public class EmployeeControllerTest {
       .andExpect(jsonPath("$[0].name").value("Terence"))
       .andExpect(jsonPath("$[0].age").value(29))
       .andExpect(jsonPath("$[0].gender").value("Male"))
-      .andExpect(jsonPath("$[0].salary").value(6666));
+      .andExpect(jsonPath("$[0].salary").value(66666));
   }
 
   @Test
@@ -77,16 +77,15 @@ public class EmployeeControllerTest {
   @Test
   void should_return_employees_when_perform_get_given_page_and_page_size() throws Exception {
     //given
-    employeeRepository.create( new Employee(1,"john",20,"male",1000));
-    employeeRepository.create( new Employee(1,"john",20,"male",1000));
-    employeeRepository.create( new Employee(1,"john",20,"male",1000));
+    employeeRepository.create(new Employee(1,"john",20,"male",1000));
+    employeeRepository.create(new Employee(1,"john",20,"male",1000));
+    employeeRepository.create(new Employee(1,"john",20,"male",1000));
     //when
-    mockMvc.perform(MockMvcRequestBuilders.get("/employees?page=1&pageSize=2"))
+    mockMvc.perform(MockMvcRequestBuilders.get("/employees?page=0&pageSize=2"))
       .andExpect(status().isOk())
-      .andExpect(jsonPath("$",hasSize(3)))
+      .andExpect(jsonPath("$", hasSize(2)))
       .andExpect(jsonPath("$[0].id").value(1))
-      .andExpect(jsonPath("$[1].id").value(2))
-      .andExpect(jsonPath("$[2].id").value(3));
+      .andExpect(jsonPath("$[1].id").value(2));
   }
 
   @Test
