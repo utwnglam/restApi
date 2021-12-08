@@ -14,6 +14,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 
 @ExtendWith(SpringExtension.class)
 public class EmployeeServiceTest {
@@ -90,5 +91,20 @@ public class EmployeeServiceTest {
 
     Employee actual = employeeService.create(employee);
     assertEquals(employee, actual);
+  }
+
+  @Test
+  public void should_return_null_when_delete_given_() {
+    Employee employee = new Employee(1, "Terence", 29, "Male", 66666);
+    given(mockEmployeeRepository.create(employee))
+      .willReturn(employee);
+    given(mockEmployeeRepository.findAll())
+      .willReturn(Collections.emptyList());
+
+    employeeService.create(employee);
+    employeeService.delete(employee.getId());
+    int actual = employeeService.findAll().size();
+
+    assertEquals(0, actual);
   }
 }

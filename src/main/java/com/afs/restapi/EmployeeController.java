@@ -8,37 +8,36 @@ import java.util.List;
 @RestController
 @RequestMapping("/employees")
 public class EmployeeController {
-  private EmployeeRepository employeeRepository;
   private EmployeeService employeeService;
 
-  public EmployeeController(EmployeeRepository employeeRepository) {
-    this.employeeRepository = employeeRepository;
+  public EmployeeController(EmployeeService employeeService) {
+    this.employeeService = employeeService;
   }
 
   @GetMapping
   public List<Employee> getAllEmployees() {
-    return employeeRepository.findAll();
+    return employeeService.findAll();
   }
 
   @GetMapping("/{id}")
   public Employee getEmployeeById(@PathVariable Integer id) {
-    return employeeRepository.findById(id);
+    return employeeService.findById(id);
   }
 
   @GetMapping(params = "gender")
   public List<Employee> getEmployeesByGender(@RequestParam String gender) {
-    return employeeRepository.findByGender(gender);
+    return employeeService.findByGender(gender);
   }
 
   @GetMapping(params = {"page", "pageSize"})
   public List<Employee> getEmployeesByPage(@RequestParam Integer page, @RequestParam Integer pageSize) {
-    return employeeRepository.findByPageNumber(page, pageSize);
+    return employeeService.findByPage(page, pageSize);
   }
 
-  @ResponseStatus(HttpStatus.CREATED)
   @PostMapping
+  @ResponseStatus(HttpStatus.CREATED)
   public Employee createEmployee(@RequestBody Employee employee) {
-    return employeeRepository.create(employee);
+    return employeeService.create(employee);
   }
 
   @PutMapping("/{id}")
@@ -49,6 +48,6 @@ public class EmployeeController {
   @DeleteMapping("/{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
   public void deleteEmployee(@PathVariable Integer id) {
-    employeeRepository.delete(id);
+    employeeService.delete(id);
   }
 }
