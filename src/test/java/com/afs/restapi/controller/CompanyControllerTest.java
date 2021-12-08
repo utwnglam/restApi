@@ -34,7 +34,7 @@ public class CompanyControllerTest {
   }
 
   @Test
-  public void should_get_all_employees_when_GET_given_employee() throws Exception {
+  public void should_get_all_companies_when_GET_given_companies() throws Exception {
     Company company = new Company(1, "comm",
       Arrays.asList(new Employee(1, "Terence", 29, "Male", 66666),
         new Employee(2, "wh", 20, "Female", 10000))
