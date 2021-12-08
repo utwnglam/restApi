@@ -46,7 +46,7 @@ public class CompanyController {
   @PutMapping("/{id}")
   public Company editCompany(@PathVariable Integer id, @RequestBody Company updatedCompany) {
     Company company = companyRepository.findById(id);
-    if (updatedCompany.getCompanyName() != null) {
+    if (updatedCompany.getCompanyName() != null && !updatedCompany.getCompanyName().equals("")) {
       company.setCompanyName(updatedCompany.getCompanyName());
     }
     return companyRepository.edit(id, company);
