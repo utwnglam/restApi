@@ -8,6 +8,10 @@ import java.util.List;
 public class EmployeeService {
   private EmployeeRepository employeeRepository;
 
+  public EmployeeService(EmployeeRepository employeeRepository) {
+    this.employeeRepository = employeeRepository;
+  }
+
   public List<Employee> findAll() {
     return employeeRepository.findAll();
   }
@@ -31,7 +35,15 @@ public class EmployeeService {
     return employeeRepository.findByGender(gender);
   }
 
-  public List<Employee> findByPage(int page, int pageSize) {
+  public List<Employee> findByPage(Integer page, Integer pageSize) {
     return employeeRepository.findByPageNumber(page,pageSize);
+  }
+
+  public Employee create(Employee employee) {
+    return employeeRepository.create(employee);
+  }
+
+  public void delete(Integer id) {
+    employeeRepository.delete(id);
   }
 }

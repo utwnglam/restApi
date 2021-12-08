@@ -68,6 +68,7 @@ public class EmployeeServiceTest {
     List<Employee> actual = employeeService.findByGender(employee.getGender());
     assertEquals(employees, actual);
   }
+
   @Test
   public void should_return_employees_when_get_given_page_and_page_size() {
     List<Employee> employees = new ArrayList<>();
@@ -79,10 +80,15 @@ public class EmployeeServiceTest {
 
     List<Employee> actual = employeeService.findByPage(0,3);
     assertEquals(employees, actual);
+  }
 
+  @Test
+  public void should_return_new_employee_when_post_given_new_employee() {
+    Employee employee = new Employee(1, "Terence", 29, "Male", 66666);
+    given(mockEmployeeRepository.create(employee))
+      .willReturn(employee);
 
-
-
-
+    Employee actual = employeeService.create(employee);
+    assertEquals(employee, actual);
   }
 }

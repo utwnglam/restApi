@@ -8,8 +8,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/employees")
 public class EmployeeController {
-//  public static final String SUCCESSFULLY_DELETE_MESSAGE = "Successfully delete";
-//  public static final String CANNOT_DELETE_MESSAGE = "Cannot delete";
   private EmployeeRepository employeeRepository;
   private EmployeeService employeeService;
 
