@@ -52,7 +52,7 @@ public class EmployeeServiceTest {
   @Test
   public void should_return_employee_when_get_given_ID() {
     Employee employee = new Employee(1, "Terence", 29, "Male", 66666);
-    given(mockEmployeeRepository.findById(any()))
+    given(mockEmployeeRepository.findById(1))
       .willReturn(employee);
     Employee actual = employeeService.findById(employee.getId());
     assertEquals(employee, actual);
@@ -67,5 +67,22 @@ public class EmployeeServiceTest {
 
     List<Employee> actual = employeeService.findByGender(employee.getGender());
     assertEquals(employees, actual);
+  }
+  @Test
+  public void should_return_employees_when_get_given_page_and_page_size() {
+    List<Employee> employees = new ArrayList<>();
+    employees.add(new Employee(1, "Terence", 29, "Male", 66666));
+    employees.add(new Employee(2, "Terence", 30, "Male", 66666));
+    employees.add(new Employee(3, "Terence", 31, "Male", 66666));
+    given(mockEmployeeRepository.findByPageNumber(0,3))
+      .willReturn(employees);
+
+    List<Employee> actual = employeeService.findByPage(0,3);
+    assertEquals(employees, actual);
+
+
+
+
+
   }
 }
