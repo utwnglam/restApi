@@ -11,11 +11,11 @@ import java.util.List;
 @Service
 public class CompanyService {
   private CompanyRepository companyRepository;
-  private EmployeeRepository employeeRepository;
+  private EmployeeService employeeService;
 
-  public CompanyService(CompanyRepository companyRepository, EmployeeRepository employeeRepository) {
+  public CompanyService(CompanyRepository companyRepository, EmployeeService employeeService) {
     this.companyRepository = companyRepository;
-    this.employeeRepository = employeeRepository;
+    this.employeeService = employeeService;
   }
 
   public List<Company> findAll() {
@@ -55,6 +55,6 @@ public class CompanyService {
   }
 
   public List<Employee> findEmployeesByCompanyId(Integer id) {
-    return employeeRepository.findByCompanyId(id);
+    return employeeService.findByCompanyId(id);
   }
 }
