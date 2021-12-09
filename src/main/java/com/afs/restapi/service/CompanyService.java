@@ -10,8 +10,8 @@ import java.util.List;
 
 @Service
 public class CompanyService {
-  private CompanyRepository companyRepository;
-  private EmployeeService employeeService;
+  private final CompanyRepository companyRepository;
+  private final EmployeeService employeeService;
 
   public CompanyService(CompanyRepository companyRepository, EmployeeService employeeService) {
     this.companyRepository = companyRepository;
@@ -19,21 +19,15 @@ public class CompanyService {
   }
 
   public List<Company> findAll() {
-    List<Company> companies = companyRepository.findAll();
-    companies.forEach(company -> company.setEmployees(findEmployeesByCompanyId(company.getId())));
-    return companies;
+    return companyRepository.findAll();
   }
 
   public Company findById(String id) {
-    Company company = companyRepository.findById(id);
-    company.setEmployees(findEmployeesByCompanyId(id));
-    return company;
+    return companyRepository.findById(id);
   }
 
   public List<Company> findByPage(Integer page, Integer pageSize) {
-    List<Company> companies = companyRepository.findByPageNumber(page, pageSize);
-    companies.forEach(company -> company.setEmployees(findEmployeesByCompanyId(company.getId())));
-    return companies;
+    return companyRepository.findByPageNumber(page, pageSize);
   }
 
   public Company create(Company company) {
@@ -49,9 +43,7 @@ public class CompanyService {
     if (updatedCompany.getCompanyName() != null && !updatedCompany.getCompanyName().equals("")) {
       company.setCompanyName(updatedCompany.getCompanyName());
     }
-    Company newCompany = companyRepository.edit(id, company);
-    newCompany.setEmployees(findEmployeesByCompanyId(id));
-    return newCompany;
+    return companyRepository.edit(id, company);
   }
 
   public List<Employee> findEmployeesByCompanyId(String id) {

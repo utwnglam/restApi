@@ -1,20 +1,29 @@
 package com.afs.restapi.controller;
 
+import com.afs.restapi.dto.CompanyRequest;
+import com.afs.restapi.dto.CompanyResponse;
+import com.afs.restapi.dto.EmployeeResponse;
 import com.afs.restapi.entity.Company;
-import com.afs.restapi.entity.Employee;
+import com.afs.restapi.mapper.CompanyMapper;
+import com.afs.restapi.mapper.EmployeeMapper;
 import com.afs.restapi.service.CompanyService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/companies")
 public class CompanyController {
-  private CompanyService companyService;
+  private final CompanyService companyService;
+  private final CompanyMapper companyMapper;
+  private final EmployeeMapper employeeMapper;
 
-  public CompanyController(CompanyService companyService) {
+  public CompanyController(CompanyService companyService, CompanyMapper companyMapper, EmployeeMapper employeeMapper) {
     this.companyService = companyService;
+    this.companyMapper = companyMapper;
+    this.employeeMapper = employeeMapper;
   }
 
   @GetMapping
@@ -23,13 +32,15 @@ public class CompanyController {
   }
 
   @GetMapping("/{id}")
-  public Company getCompanyById(@PathVariable String id) {
-    return companyService.findById(id);
+  public CompanyResponse getCompanyById(@PathVariable String id) {
+    return companyMapper.toResponse(companyService.findById(id), companyService.findEmployeesByCompanyId(id));
   }
 
   @GetMapping("/{id}/employees")
-  public List<Employee> getCompanyEmployeesList(@PathVariable String id) {
-    return companyService.findEmployeesByCompanyId(id);
+  public List<EmployeeResponse> getCompanyEmployeesList(@PathVariable String id) {
+    return companyService.findEmployeesByCompanyId(id).stream()
+      .map(employeeMapper::toResponse)
+      .collect(Collectors.toList());
   }
 
   @GetMapping(params = {"page", "pageSize"})
@@ -39,13 +50,13 @@ public class CompanyController {
 
   @ResponseStatus(HttpStatus.CREATED)
   @PostMapping
-  public Company createCompany(@RequestBody Company company) {
-    return companyService.create(company);
+  public Company createCompany(@RequestBody CompanyRequest companyRequest) {
+    return companyService.create(companyMapper.toEntity(companyRequest));
   }
 
   @PutMapping("/{id}")
-  public Company editCompany(@PathVariable String id, @RequestBody Company updatedCompany) {
-    return companyService.edit(id, updatedCompany);
+  public Company editCompany(@PathVariable String id, @RequestBody CompanyRequest updatedCompanyRequest) {
+    return companyService.edit(id, companyMapper.toEntity(updatedCompanyRequest));
   }
 
   @DeleteMapping("/{id}")

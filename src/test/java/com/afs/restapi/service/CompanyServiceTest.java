@@ -74,7 +74,7 @@ public class CompanyServiceTest {
     employees.add(new Employee("2", "Terence", 28, "Male", 66666, "1"));
     employees.add(new Employee("3", "Terence", 27, "Male", 66666, "1"));
 
-    company.setEmployees(employees);
+//    company.setEmployees(employees);
 
     given(employeeService.findByCompanyId(company.getId()))
       .willReturn(employees);
