@@ -1,7 +1,9 @@
 package com.afs.restapi.service;
 
 import com.afs.restapi.entity.Company;
+import com.afs.restapi.entity.Employee;
 import com.afs.restapi.repository.CompanyRepository;
+import com.afs.restapi.repository.EmployeeRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -22,6 +24,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(SpringExtension.class)
 public class CompanyServiceTest {
+  @Mock
+  EmployeeRepository mockEmployeeRepository;
   @Mock
   CompanyRepository mockCompanyRepository;
   @InjectMocks
@@ -60,6 +64,24 @@ public class CompanyServiceTest {
 
     List<Company> actual = companyService.findByPage(1,2);
     assertEquals(companies, actual);
+  }
+
+  @Test
+  public void should_return_employees_when_get_given_company_ID() {
+    Company company = new Company(1, "comm");
+    List<Employee> employees = new ArrayList<>();
+    employees.add(new Employee(1, "Terence", 29, "Male", 66666, 1));
+    employees.add(new Employee(2, "Terence", 28, "Male", 66666, 1));
+    employees.add(new Employee(3, "Terence", 27, "Male", 66666, 1));
+
+    company.setEmployees(employees);
+
+    given(mockEmployeeRepository.findByCompanyId(company.getId()))
+      .willReturn(employees);
+
+    List<Employee> actual = companyService.findEmployeesByCompanyId(company.getId());
+
+    assertEquals(employees, actual);
   }
 
   @Test

@@ -1,7 +1,9 @@
 package com.afs.restapi.controller;
 
 import com.afs.restapi.entity.Company;
+import com.afs.restapi.entity.Employee;
 import com.afs.restapi.repository.CompanyRepository;
+import com.afs.restapi.repository.EmployeeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,11 +25,14 @@ public class CompanyControllerTest {
   @Autowired
   MockMvc mockMvc;
   @Autowired
+  EmployeeRepository employeeRepository;
+  @Autowired
   CompanyRepository companyRepository;
 
   @BeforeEach
   public void cleanRepository() {
     companyRepository.clearAll();
+    employeeRepository.clearAll();
   }
 
   @Test
@@ -35,15 +40,16 @@ public class CompanyControllerTest {
     Company company = new Company(1, "comm");
     companyRepository.create(company);
 
+    employeeRepository.create(new Employee(1, "Terence", 29, "Male", 66666, 1));
+    employeeRepository.create(new Employee(2, "Terence", 28, "Male", 66666, 1));
+    employeeRepository.create(new Employee(3, "Terence", 27, "Male", 66666, 1));
+
     mockMvc.perform(MockMvcRequestBuilders.get(COMPANIES_URL_BASE))
       .andExpect(status().isOk())
       .andExpect(jsonPath("$", hasSize(1)))
       .andExpect(jsonPath("$[0].id").isNumber())
       .andExpect(jsonPath("$[0].companyName").value("comm"))
-      .andExpect(jsonPath("$[0].employees[*].name").value(containsInAnyOrder("Terence", "wh")))
-      .andExpect(jsonPath("$[0].employees[*].age").value(containsInAnyOrder(20, 29)))
-      .andExpect(jsonPath("$[0].employees[*].gender").value(containsInAnyOrder("Female", "Male")))
-      .andExpect(jsonPath("$[0].employees[*].salary").value(containsInAnyOrder(10000, 66666)));
+      .andExpect(jsonPath("$[0].employees", hasSize(3)));
   }
 
   @Test
@@ -60,6 +66,25 @@ public class CompanyControllerTest {
       .andExpect(jsonPath("$.employees[*].age").value(containsInAnyOrder(20, 29)))
       .andExpect(jsonPath("$.employees[*].gender").value(containsInAnyOrder("Female", "Male")))
       .andExpect(jsonPath("$.employees[*].salary").value(containsInAnyOrder(10000, 66666)));
+  }
+
+  @Test
+  void should_return_employees_when_perform_get_given_company_id() throws Exception {
+    //given
+    Company company = new Company(1, "comm");
+    companyRepository.create(company);
+
+    employeeRepository.create(new Employee(1, "Terence", 29, "Male", 66666, 1));
+    employeeRepository.create(new Employee(2, "Terence2", 28, "Male", 66666, 1));
+    employeeRepository.create(new Employee(3, "Terence3", 27, "Male", 66666, 2));
+
+    mockMvc.perform(MockMvcRequestBuilders.get(COMPANIES_URL_BASE + "/" + company.getId() + "/employees"))
+      .andExpect(status().isOk())
+      .andExpect(jsonPath("$",hasSize(2)))
+      .andExpect(jsonPath("$[*].name").value(containsInAnyOrder("Terence", "Terence2")))
+      .andExpect(jsonPath("$[*].age").value(containsInAnyOrder(29, 28)))
+      .andExpect(jsonPath("$[*].gender").value(containsInAnyOrder("Male", "Male")))
+      .andExpect(jsonPath("$[*].salary").value(containsInAnyOrder(66666, 66666)));
   }
 
   @Test

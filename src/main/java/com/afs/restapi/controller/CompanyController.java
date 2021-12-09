@@ -28,10 +28,10 @@ public class CompanyController {
     return companyService.findById(id);
   }
 
-//  @GetMapping("/{id}/employees")
-//  public List<Employee> getCompanyEmployeesList(@PathVariable Integer id) {
-//    return companyService.findEmployees(id);
-//  }
+  @GetMapping("/{id}/employees")
+  public List<Employee> getCompanyEmployeesList(@PathVariable Integer id) {
+    return companyService.findEmployeesByCompanyId(id);
+  }
 
   @GetMapping(params = {"page", "pageSize"})
   public List<Company> getCompaniesByPage(@RequestParam Integer page, @RequestParam Integer pageSize) {

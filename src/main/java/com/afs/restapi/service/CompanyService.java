@@ -3,6 +3,7 @@ package com.afs.restapi.service;
 import com.afs.restapi.entity.Company;
 import com.afs.restapi.entity.Employee;
 import com.afs.restapi.repository.CompanyRepository;
+import com.afs.restapi.repository.EmployeeRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,13 +11,19 @@ import java.util.List;
 @Service
 public class CompanyService {
   private CompanyRepository companyRepository;
+  private EmployeeRepository employeeRepository;
 
-  public CompanyService(CompanyRepository companyRepository) {
+  public CompanyService(CompanyRepository companyRepository, EmployeeRepository employeeRepository) {
     this.companyRepository = companyRepository;
+    this.employeeRepository = employeeRepository;
   }
 
   public List<Company> findAll() {
-    return companyRepository.findAll();
+    List<Company> companies = companyRepository.findAll();
+    companies.forEach((company) -> {
+      company.setEmployees(findEmployeesByCompanyId(company.getId()));
+    });
+    return companies;
   }
 
   public Company findById(Integer id) {
@@ -40,6 +47,12 @@ public class CompanyService {
     if (updatedCompany.getCompanyName() != null && !updatedCompany.getCompanyName().equals("")) {
       company.setCompanyName(updatedCompany.getCompanyName());
     }
-    return companyRepository.edit(id, company);
+    Company newCompany = companyRepository.edit(id, company);
+    newCompany.setEmployees(findEmployeesByCompanyId(id));
+    return newCompany;
+  }
+
+  public List<Employee> findEmployeesByCompanyId(Integer id) {
+    return employeeRepository.findByCompanyId(id);
   }
 }

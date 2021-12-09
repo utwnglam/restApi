@@ -12,7 +12,13 @@ import java.util.stream.Collectors;
 public class EmployeeRepository {
   private List<Employee> employees = new ArrayList<>();
 
-  public EmployeeRepository() {}
+  public EmployeeRepository() {
+    employees.add(new Employee(1, "Terence", 29, "Male", 66666, 1));
+    employees.add(new Employee(2, "Terence", 28, "Male", 66666, 1));
+    employees.add(new Employee(3, "Terence", 27, "Male", 66666, 1));
+    employees.add(new Employee(4, "Joanne", 26, "Female", 66666, 2));
+    employees.add(new Employee(5, "Joanne", 25, "Female", 18888, 2));
+  }
 
   public List<Employee> findAll() {
     return employees;

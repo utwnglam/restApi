@@ -16,7 +16,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
-
 @ExtendWith(SpringExtension.class)
 public class EmployeeServiceTest {
   @Mock
@@ -71,17 +70,6 @@ public class EmployeeServiceTest {
     assertEquals(employees, actual);
   }
 
-  @Test
-  public void should_return_employees_when_get_given_companyId() {
-    List<Employee> employees = new ArrayList<>();
-    Employee employee = new Employee(1, "Terence", 29, "Male", 66666, 1);
-    employees.add(employee);
-    given(mockEmployeeRepository.findByCompanyId(1))
-      .willReturn(employees);
-
-    List<Employee> actual = employeeService.findByCompanyId(employee.getCompanyId());
-    assertEquals(employees, actual);
-  }
   @Test
   public void should_return_employees_when_get_given_page_and_page_size() {
     List<Employee> employees = new ArrayList<>();
