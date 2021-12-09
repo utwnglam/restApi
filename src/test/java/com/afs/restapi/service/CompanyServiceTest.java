@@ -5,10 +5,13 @@ import com.afs.restapi.entity.Employee;
 import com.afs.restapi.repository.CompanyRepository;
 import com.afs.restapi.repository.CompanyRepositoryInMongo;
 import com.afs.restapi.repository.EmployeeRepository;
+import com.afs.restapi.repository.EmployeeRepositoryInMongo;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.ArrayList;
@@ -20,20 +23,17 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @ExtendWith(SpringExtension.class)
 public class CompanyServiceTest {
   @Mock
-  CompanyRepository mockCompanyRepository;
-  @Mock
   CompanyRepositoryInMongo mockCompanyRepositoryInMongo;
 
   @InjectMocks
   CompanyService companyService;
-  @InjectMocks
-  EmployeeService employeeService;
 
   @Test
   public void should_get_all_companies_when_GET_given_companies() {
@@ -63,31 +63,16 @@ public class CompanyServiceTest {
   public void should_return_company_when_get_given_page_and_page_size() {
     List<Company> companies = new ArrayList<>();
     companies.add(new Company("1", "comm"));
-    companies.add(new Company("2", "comm2"));
+    companies.add(new Company("2", "company2"));
 
-    given(mockCompanyRepository.findByPageNumber(1,2))
-      .willReturn(companies);
+    PageImpl<Company> pageToBeReturned = new PageImpl<>(companies, PageRequest.of(1, 2), 1);
+    given(mockCompanyRepositoryInMongo.findAll(any(PageRequest.class)))
+      .willReturn(pageToBeReturned);
 
     List<Company> actual = companyService.findByPage(1,2);
-    assertEquals(companies, actual);
-  }
 
-  @Test
-  public void should_return_employees_when_get_given_company_ID() {
-    Company company = new Company("1", "comm");
-    List<Employee> employees = new ArrayList<>();
-    employees.add(new Employee("1", "Terence", 29, "Male", 66666, "1"));
-    employees.add(new Employee("2", "Terence", 28, "Male", 66666, "1"));
-    employees.add(new Employee("3", "Terence", 27, "Male", 66666, "1"));
-
-//    company.setEmployees(employees);
-
-    given(employeeService.findByCompanyId(company.getId()))
-      .willReturn(employees);
-
-    List<Employee> actual = companyService.findEmployeesByCompanyId(company.getId());
-
-    assertEquals(employees, actual);
+    assertEquals(companies.get(0).getCompanyName(), actual.get(0).getCompanyName());
+    assertEquals(companies.get(1).getCompanyName(), actual.get(1).getCompanyName());
   }
 
   @Test
@@ -95,20 +80,20 @@ public class CompanyServiceTest {
     Company company = new Company("1", "comm");
     Company updatedCompany = new Company("1", "comm222");
 
-    given(mockCompanyRepository.findById(any()))
-      .willReturn(company);
+    given(mockCompanyRepositoryInMongo.findById(any()))
+      .willReturn(java.util.Optional.of(company));
     company.setCompanyName(updatedCompany.getCompanyName());
-    given(mockCompanyRepository.edit(any(),any(Company.class)))
+    given(mockCompanyRepositoryInMongo.save(any(Company.class)))
       .willReturn(company);
 
     Company actual = companyService.edit(company.getId(), updatedCompany);
-    assertEquals(company, actual);
+    assertEquals(company.getCompanyName(), actual.getCompanyName());
   }
 
   @Test
   public void should_create_company_when_create_given_company() {
     Company company = new Company("1", "comm");
-    given(mockCompanyRepository.create(company))
+    given(mockCompanyRepositoryInMongo.insert(company))
       .willReturn(company);
 
     Company actual = companyService.create(company);
@@ -118,10 +103,13 @@ public class CompanyServiceTest {
   @Test
   public void should_return_null_list_when_delete_given_deleted_company() {
     Company company = new Company("1", "comm");
-    given(mockCompanyRepository.create(company))
+    given(mockCompanyRepositoryInMongo.insert(company))
       .willReturn(company);
-    given(mockCompanyRepository.findAll())
+    given(mockCompanyRepositoryInMongo.findAll())
       .willReturn(Collections.emptyList());
+    given(mockCompanyRepositoryInMongo.findById(company.getId()))
+      .willReturn(java.util.Optional.of(company));
+    doNothing().when(mockCompanyRepositoryInMongo).delete(company);
 
     companyService.create(company);
     companyService.delete(company.getId());

@@ -1,16 +1,16 @@
 package com.afs.restapi.dto;
 
 public class CompanyRequest {
-  private String name;
+  private String companyName;
 
   public CompanyRequest() {
   }
 
-  public String getName() {
-    return name;
+  public String getCompanyName() {
+    return companyName;
   }
 
-  public void setName(String name) {
-    this.name = name;
+  public void setCompanyName(String companyName) {
+    this.companyName = companyName;
   }
 }

@@ -28,14 +28,11 @@ public class EmployeeControllerTest {
   @Autowired
   MockMvc mockMvc;
   @Autowired
-  EmployeeRepository employeeRepository;
-  @Autowired
   EmployeeRepositoryInMongo employeeRepositoryInMongo;
 
   @BeforeEach
 //  @AfterEach
   void cleanRepository() {
-    employeeRepository.clearAll();
     employeeRepositoryInMongo.deleteAll();
   }
 
