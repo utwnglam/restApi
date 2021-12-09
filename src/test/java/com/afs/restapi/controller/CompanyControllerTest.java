@@ -37,17 +37,17 @@ public class CompanyControllerTest {
 
   @Test
   public void should_get_all_companies_when_GET_given_companies() throws Exception {
-    Company company = new Company(1, "comm");
+    Company company = new Company("1", "comm");
     companyRepository.create(company);
 
-    employeeRepository.create(new Employee(1, "Terence", 29, "Male", 66666, 1));
-    employeeRepository.create(new Employee(2, "Terence", 28, "Male", 66666, 1));
-    employeeRepository.create(new Employee(3, "Terence", 27, "Male", 66666, 1));
+    employeeRepository.create(new Employee("1", "Terence", 29, "Male", 66666, "1"));
+    employeeRepository.create(new Employee("2", "Terence", 28, "Male", 66666, "1"));
+    employeeRepository.create(new Employee("3", "Terence", 27, "Male", 66666, "1"));
 
     mockMvc.perform(MockMvcRequestBuilders.get(COMPANIES_URL_BASE))
       .andExpect(status().isOk())
       .andExpect(jsonPath("$", hasSize(1)))
-      .andExpect(jsonPath("$[0].id").isNumber())
+      .andExpect(jsonPath("$[0].id").isString())
       .andExpect(jsonPath("$[0].companyName").value("comm"))
       .andExpect(jsonPath("$[0].employees", hasSize(3)));
   }
@@ -55,16 +55,16 @@ public class CompanyControllerTest {
   @Test
   public void should_return_company_when_perform_get_given_id() throws Exception {
     //given
-    Company company = new Company(1, "comm");
+    Company company = new Company("1", "comm");
     companyRepository.create(company);
 
-    employeeRepository.create(new Employee(1, "Terence", 29, "Male", 66666, 1));
-    employeeRepository.create(new Employee(2, "Terence2", 28, "Male", 66666, 1));
-    employeeRepository.create(new Employee(3, "Terence3", 27, "Male", 66666, 2));
+    employeeRepository.create(new Employee("1", "Terence", 29, "Male", 66666, "1"));
+    employeeRepository.create(new Employee("2", "Terence2", 28, "Male", 66666, "1"));
+    employeeRepository.create(new Employee("3", "Terence3", 27, "Male", 66666, "2"));
 
     mockMvc.perform(MockMvcRequestBuilders.get(COMPANIES_URL_BASE + "/" + company.getId()))
       .andExpect(status().isOk())
-      .andExpect(jsonPath("$.id").isNumber())
+      .andExpect(jsonPath("$.id").isString())
       .andExpect(jsonPath("$.companyName").value("comm"))
       .andExpect(jsonPath("$.employees[*].name").value(containsInAnyOrder("Terence", "Terence2")))
       .andExpect(jsonPath("$.employees[*].age").value(containsInAnyOrder(28, 29)))
@@ -76,12 +76,12 @@ public class CompanyControllerTest {
   @Test
   void should_return_employees_when_perform_get_given_company_id() throws Exception {
     //given
-    Company company = new Company(1, "comm");
+    Company company = new Company("1", "comm");
     companyRepository.create(company);
 
-    employeeRepository.create(new Employee(1, "Terence", 29, "Male", 66666, 1));
-    employeeRepository.create(new Employee(2, "Terence2", 28, "Male", 66666, 1));
-    employeeRepository.create(new Employee(3, "Terence3", 27, "Male", 66666, 2));
+    employeeRepository.create(new Employee("1", "Terence", 29, "Male", 66666, "1"));
+    employeeRepository.create(new Employee("2", "Terence2", 28, "Male", 66666, "1"));
+    employeeRepository.create(new Employee("3", "Terence3", 27, "Male", 66666, "2"));
 
     mockMvc.perform(MockMvcRequestBuilders.get(COMPANIES_URL_BASE + "/" + company.getId() + "/employees"))
       .andExpect(status().isOk())
@@ -95,12 +95,12 @@ public class CompanyControllerTest {
   @Test
   public void should_return_company_when_perform_get_given_page_and_page_size() throws Exception {
     //given
-    companyRepository.create(new Company(1, "comm"));
-    companyRepository.create(new Company(2, "comm2"));
+    companyRepository.create(new Company("1", "comm"));
+    companyRepository.create(new Company("2", "comm2"));
 
-    employeeRepository.create(new Employee(1, "Terence", 29, "Male", 66666, 1));
-    employeeRepository.create(new Employee(2, "Terence2", 28, "Male", 66666, 1));
-    employeeRepository.create(new Employee(3, "Terence3", 27, "Male", 66666, 2));
+    employeeRepository.create(new Employee("1", "Terence", 29, "Male", 66666, "1"));
+    employeeRepository.create(new Employee("2", "Terence2", 28, "Male", 66666, "1"));
+    employeeRepository.create(new Employee("3", "Terence3", 27, "Male", 66666, "2"));
 
     //when
     mockMvc.perform(MockMvcRequestBuilders.get(COMPANIES_URL_BASE + "?page=1&pageSize=2"))
@@ -124,13 +124,13 @@ public class CompanyControllerTest {
         .contentType(MediaType.APPLICATION_JSON)
         .content(companyJsonString))
       .andExpect(status().isCreated())
-      .andExpect(jsonPath("$.id").isNumber())
+      .andExpect(jsonPath("$.id").isString())
       .andExpect(jsonPath("$.companyName").value("cannotFindCompany222"));
   }
 
   @Test
   public void should_return_edited_company_when_put_given_updated_employee() throws Exception {
-    Company company = new Company(1, "comm");
+    Company company = new Company("1", "comm");
     companyRepository.create(company);
 
     String updatedCompanyJson = "{\n" +
@@ -148,7 +148,7 @@ public class CompanyControllerTest {
   @Test
   void should_delete_when_perform_delete_given_company_id() throws Exception {
     //given
-    Company company = new Company(1, "comm");
+    Company company = new Company("1", "comm");
     companyRepository.create(company);
 
     mockMvc.perform(MockMvcRequestBuilders.delete(COMPANIES_URL_BASE + "/" + company.getId()))

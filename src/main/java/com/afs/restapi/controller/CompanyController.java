@@ -23,12 +23,12 @@ public class CompanyController {
   }
 
   @GetMapping("/{id}")
-  public Company getCompanyById(@PathVariable Integer id) {
+  public Company getCompanyById(@PathVariable String id) {
     return companyService.findById(id);
   }
 
   @GetMapping("/{id}/employees")
-  public List<Employee> getCompanyEmployeesList(@PathVariable Integer id) {
+  public List<Employee> getCompanyEmployeesList(@PathVariable String id) {
     return companyService.findEmployeesByCompanyId(id);
   }
 
@@ -44,13 +44,13 @@ public class CompanyController {
   }
 
   @PutMapping("/{id}")
-  public Company editCompany(@PathVariable Integer id, @RequestBody Company updatedCompany) {
+  public Company editCompany(@PathVariable String id, @RequestBody Company updatedCompany) {
     return companyService.edit(id, updatedCompany);
   }
 
   @DeleteMapping("/{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void deleteCompany(@PathVariable Integer id) {
+  public void deleteCompany(@PathVariable String id) {
     companyService.delete(id);
   }
 }

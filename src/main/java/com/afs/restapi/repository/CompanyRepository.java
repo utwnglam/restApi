@@ -13,16 +13,16 @@ public class CompanyRepository {
   private List<Company> companies = new ArrayList<>();
 
   public CompanyRepository() {
-    companies.add(new Company(1, "comm"));
-    companies.add(new Company(2, "comingCompany"));
-    companies.add(new Company(3, "cannotFindCompany"));
+    companies.add(new Company("1", "comm"));
+    companies.add(new Company("2", "comingCompany"));
+    companies.add(new Company("3", "cannotFindCompany"));
   }
 
   public List<Company> findAll() {
     return companies;
   }
 
-  public Company findById(Integer id) {
+  public Company findById(String id) {
     return companies.stream()
       .filter(company -> company.getId().equals(id))
       .findFirst()
@@ -39,23 +39,23 @@ public class CompanyRepository {
 
   public Company create(Company company) {
     int nextId = companies.stream()
-      .mapToInt(Company::getId)
+      .mapToInt(item -> Integer.parseInt(item.getId()))
       .max()
       .orElse(0) + 1;
 
-    company.setId(nextId);
+    company.setId(String.valueOf(nextId));
     companies.add(company);
     return company;
   }
 
-  public Company edit(Integer id, Company updatedCompany) {
+  public Company edit(String id, Company updatedCompany) {
     Company company = findById(id);
     companies.remove(company);
     companies.add(updatedCompany);
     return updatedCompany;
   }
 
-  public void delete(Integer id) {
+  public void delete(String id) {
     Company company = findById(id);
     companies.remove(company);
   }

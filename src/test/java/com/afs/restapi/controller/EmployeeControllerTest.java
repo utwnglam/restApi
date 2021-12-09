@@ -31,13 +31,13 @@ public class EmployeeControllerTest {
 
   @Test
   public void should_get_all_employees_when_GET_given_employee() throws Exception {
-    Employee employee = new Employee(1, "Terence", 29, "Male", 66666, 1);
+    Employee employee = new Employee("1", "Terence", 29, "Male", 66666, "1");
     employeeRepository.create(employee);
 
     mockMvc.perform(MockMvcRequestBuilders.get(EMPLOYEES_URL_BASE))
       .andExpect(status().isOk())
       .andExpect(jsonPath("$", hasSize(1)))
-      .andExpect(jsonPath("$[0].id").isNumber())
+      .andExpect(jsonPath("$[0].id").isString())
       .andExpect(jsonPath("$[0].name").value("Terence"))
       .andExpect(jsonPath("$[0].age").value(29))
       .andExpect(jsonPath("$[0].gender").value("Male"))
@@ -47,12 +47,12 @@ public class EmployeeControllerTest {
   @Test
   void should_return_employee_when_perform_get_given_employee_id() throws Exception {
     //given
-    Employee employee = new Employee(1,"john",20,"male",1000, 1);
+    Employee employee = new Employee("1","john",20,"male",1000, "1");
     employeeRepository.create(employee);
 
     mockMvc.perform(MockMvcRequestBuilders.get("/employees/{id}", employee.getId()))
       .andExpect(status().isOk())
-      .andExpect(jsonPath("$.id").isNumber())
+      .andExpect(jsonPath("$.id").isString())
       .andExpect(jsonPath("$.name").value("john"))
       .andExpect(jsonPath("$.age").value(20))
       .andExpect(jsonPath("$.gender").value("male"))
@@ -62,12 +62,12 @@ public class EmployeeControllerTest {
   @Test
   void should_get_employee_when_perform_get_given_gender() throws Exception {
     //given
-    Employee employee = new Employee(1,"john",20,"male",1000, 1);
+    Employee employee = new Employee("1","john",20,"male",1000, "1");
     employeeRepository.create(employee);
     mockMvc.perform(MockMvcRequestBuilders.get("/employees?gender=male"))
       .andExpect(status().isOk())
       .andExpect(jsonPath("$",hasSize(1)))
-      .andExpect(jsonPath("$[0].id").isNumber())
+      .andExpect(jsonPath("$[0].id").isString())
       .andExpect(jsonPath("$[0].name").value("john"))
       .andExpect(jsonPath("$[0].age").value(20))
       .andExpect(jsonPath("$[0].gender").value("male"))
@@ -77,9 +77,9 @@ public class EmployeeControllerTest {
   @Test
   void should_return_employees_when_perform_get_given_page_and_page_size() throws Exception {
     //given
-    employeeRepository.create(new Employee(1,"john",20,"male",1000, 1));
-    employeeRepository.create(new Employee(1,"john",20,"male",1000, 1));
-    employeeRepository.create(new Employee(1,"john",20,"male",1000, 1));
+    employeeRepository.create(new Employee("1","john",20,"male",1000, "1"));
+    employeeRepository.create(new Employee("1","john",20,"male",1000, "1"));
+    employeeRepository.create(new Employee("1","john",20,"male",1000, "1"));
     //when
     mockMvc.perform(MockMvcRequestBuilders.get("/employees?page=0&pageSize=2"))
       .andExpect(status().isOk())
@@ -109,7 +109,7 @@ public class EmployeeControllerTest {
 
   @Test
   void should_return_edited_employee_when_perform_put_given_updated_employee() throws Exception {
-    Employee employee = new Employee(1,"john",20,"male",1000, 1);
+    Employee employee = new Employee("1","john",20,"male",1000, "1");
     employeeRepository.create(employee);
 
     String updatedEmployee = "{\"id\": 1,\n" +
@@ -129,7 +129,7 @@ public class EmployeeControllerTest {
   @Test
   void should_delete_when_perform_delete_given_employee_id() throws Exception {
     //given
-    Employee employee = new Employee(1,"john",20,"male",1000, 1);
+    Employee employee = new Employee("1","john",20,"male",1000, "1");
     employeeRepository.create(employee);
 
     mockMvc.perform(MockMvcRequestBuilders.delete("/employees/{id}",employee.getId()))

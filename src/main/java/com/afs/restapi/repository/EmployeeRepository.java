@@ -13,18 +13,18 @@ public class EmployeeRepository {
   private List<Employee> employees = new ArrayList<>();
 
   public EmployeeRepository() {
-    employees.add(new Employee(1, "Terence", 29, "Male", 66666, 1));
-    employees.add(new Employee(2, "Terence", 28, "Male", 66666, 1));
-    employees.add(new Employee(3, "Terence", 27, "Male", 66666, 1));
-    employees.add(new Employee(4, "Joanne", 26, "Female", 66666, 2));
-    employees.add(new Employee(5, "Joanne", 25, "Female", 18888, 2));
+    employees.add(new Employee("1", "Terence", 29, "Male", 66666, "1"));
+    employees.add(new Employee("2", "Terence", 28, "Male", 66666, "1"));
+    employees.add(new Employee("3", "Terence", 27, "Male", 66666, "1"));
+    employees.add(new Employee("4", "Joanne", 26, "Female", 66666, "2"));
+    employees.add(new Employee("5", "Joanne", 25, "Female", 18888, "2"));
   }
 
   public List<Employee> findAll() {
     return employees;
   }
 
-  public Employee findById(Integer id) {
+  public Employee findById(String id) {
     return employees.stream()
       .filter(employee -> employee.getId().equals(id))
       .findFirst()
@@ -37,7 +37,7 @@ public class EmployeeRepository {
       .collect(Collectors.toList());
   }
 
-  public List<Employee> findByCompanyId(Integer id) {
+  public List<Employee> findByCompanyId(String id) {
     return employees.stream()
       .filter(employee -> employee.getCompanyId().equals(id))
       .collect(Collectors.toList());
@@ -45,16 +45,16 @@ public class EmployeeRepository {
 
   public Employee create(Employee employee) {
     int nextId = employees.stream()
-      .mapToInt(Employee::getId)
+      .mapToInt(item -> Integer.parseInt(item.getId()))
       .max()
       .orElse(0) + 1;
 
-    employee.setId(nextId);
+    employee.setId(String.valueOf(nextId));
     employees.add(employee);
     return employee;
   }
 
-  public Employee save(Integer id, Employee updatedEmployee) {
+  public Employee save(String id, Employee updatedEmployee) {
     Employee employee = findById(id);
     employees.remove(employee);
     employees.add(updatedEmployee);
@@ -68,7 +68,7 @@ public class EmployeeRepository {
       .collect(Collectors.toList());
   }
 
-  public void delete(Integer id) {
+  public void delete(String id) {
     Employee employee = findById(id);
     employees.remove(employee);
   }

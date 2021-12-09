@@ -24,7 +24,7 @@ public class CompanyService {
     return companies;
   }
 
-  public Company findById(Integer id) {
+  public Company findById(String id) {
     Company company = companyRepository.findById(id);
     company.setEmployees(findEmployeesByCompanyId(id));
     return company;
@@ -40,11 +40,11 @@ public class CompanyService {
     return companyRepository.create(company);
   }
 
-  public void delete(Integer id) {
+  public void delete(String id) {
     companyRepository.delete(id);
   }
 
-  public Company edit(Integer id, Company updatedCompany) {
+  public Company edit(String id, Company updatedCompany) {
     Company company = companyRepository.findById(id);
     if (updatedCompany.getCompanyName() != null && !updatedCompany.getCompanyName().equals("")) {
       company.setCompanyName(updatedCompany.getCompanyName());
@@ -54,7 +54,7 @@ public class CompanyService {
     return newCompany;
   }
 
-  public List<Employee> findEmployeesByCompanyId(Integer id) {
+  public List<Employee> findEmployeesByCompanyId(String id) {
     return employeeService.findByCompanyId(id);
   }
 }

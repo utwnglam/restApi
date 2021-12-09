@@ -34,7 +34,7 @@ public class CompanyServiceTest {
   @Test
   public void should_get_all_companies_when_GET_given_companies() {
     List<Company> companies = new ArrayList<>();
-    companies.add(new Company(1, "comm"));
+    companies.add(new Company("1", "comm"));
     given(mockCompanyRepository.findAll())
       .willReturn(companies);
 
@@ -45,8 +45,8 @@ public class CompanyServiceTest {
 
   @Test
   public void should_return_company_when_get_given_ID() {
-    Company company = new Company(1, "comm");
-    given(mockCompanyRepository.findById(1))
+    Company company = new Company("1", "comm");
+    given(mockCompanyRepository.findById("1"))
       .willReturn(company);
 
     Company actual = companyService.findById(company.getId());
@@ -56,8 +56,8 @@ public class CompanyServiceTest {
   @Test
   public void should_return_company_when_get_given_page_and_page_size() {
     List<Company> companies = new ArrayList<>();
-    companies.add(new Company(1, "comm"));
-    companies.add(new Company(2, "comm2"));
+    companies.add(new Company("1", "comm"));
+    companies.add(new Company("2", "comm2"));
 
     given(mockCompanyRepository.findByPageNumber(1,2))
       .willReturn(companies);
@@ -68,11 +68,11 @@ public class CompanyServiceTest {
 
   @Test
   public void should_return_employees_when_get_given_company_ID() {
-    Company company = new Company(1, "comm");
+    Company company = new Company("1", "comm");
     List<Employee> employees = new ArrayList<>();
-    employees.add(new Employee(1, "Terence", 29, "Male", 66666, 1));
-    employees.add(new Employee(2, "Terence", 28, "Male", 66666, 1));
-    employees.add(new Employee(3, "Terence", 27, "Male", 66666, 1));
+    employees.add(new Employee("1", "Terence", 29, "Male", 66666, "1"));
+    employees.add(new Employee("2", "Terence", 28, "Male", 66666, "1"));
+    employees.add(new Employee("3", "Terence", 27, "Male", 66666, "1"));
 
     company.setEmployees(employees);
 
@@ -86,8 +86,8 @@ public class CompanyServiceTest {
 
   @Test
   public void should_return_updated_company_when_edit_given_updated_company() {
-    Company company = new Company(1, "comm");
-    Company updatedCompany = new Company(1, "comm222");
+    Company company = new Company("1", "comm");
+    Company updatedCompany = new Company("1", "comm222");
 
     given(mockCompanyRepository.findById(any()))
       .willReturn(company);
@@ -101,7 +101,7 @@ public class CompanyServiceTest {
 
   @Test
   public void should_create_company_when_create_given_company() {
-    Company company = new Company(1, "comm");
+    Company company = new Company("1", "comm");
     given(mockCompanyRepository.create(company))
       .willReturn(company);
 
@@ -111,7 +111,7 @@ public class CompanyServiceTest {
 
   @Test
   public void should_return_null_list_when_delete_given_deleted_company() {
-    Company company = new Company(1, "comm");
+    Company company = new Company("1", "comm");
     given(mockCompanyRepository.create(company))
       .willReturn(company);
     given(mockCompanyRepository.findAll())

@@ -18,7 +18,7 @@ public class EmployeeService {
     return employeeRepository.findAll();
   }
 
-  public Employee findById(Integer id) {
+  public Employee findById(String id) {
     return employeeRepository.findById(id);
   }
 
@@ -34,7 +34,7 @@ public class EmployeeService {
     return employeeRepository.create(employee);
   }
 
-  public Employee edit(Integer id, Employee updatedEmployee) {
+  public Employee edit(String id, Employee updatedEmployee) {
     Employee employee = employeeRepository.findById(id);
     if (updatedEmployee.getAge() != null && !updatedEmployee.getAge().equals(0)) {
       employee.setAge(updatedEmployee.getAge());
@@ -45,11 +45,11 @@ public class EmployeeService {
     return employeeRepository.save(id, employee);
   }
 
-  public void delete(Integer id) {
+  public void delete(String id) {
     employeeRepository.delete(id);
   }
 
-  public List<Employee> findByCompanyId(Integer id) {
+  public List<Employee> findByCompanyId(String id) {
     return employeeRepository.findByCompanyId(id);
   }
 }
