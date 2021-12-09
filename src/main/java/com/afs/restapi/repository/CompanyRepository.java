@@ -1,7 +1,6 @@
 package com.afs.restapi.repository;
 
 import com.afs.restapi.entity.Company;
-import com.afs.restapi.entity.Employee;
 import com.afs.restapi.exception.NoCompanyFoundException;
 import org.springframework.stereotype.Repository;
 
@@ -28,10 +27,6 @@ public class CompanyRepository {
       .filter(company -> company.getId().equals(id))
       .findFirst()
       .orElseThrow(NoCompanyFoundException::new);
-  }
-
-  public List<Employee> findEmployees(Integer id) {
-    return findById(id).getEmployees();
   }
 
   public List<Company> findByPageNumber(Integer page, Integer pageSize) {
