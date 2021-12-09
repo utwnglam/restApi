@@ -2,10 +2,8 @@ package com.afs.restapi.service;
 
 import com.afs.restapi.entity.Employee;
 import com.afs.restapi.exception.NoEmployeeFoundException;
-import com.afs.restapi.repository.EmployeeRepository;
 import com.afs.restapi.repository.EmployeeRepositoryInMongo;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
