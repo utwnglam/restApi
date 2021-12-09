@@ -2,8 +2,9 @@ package com.afs.restapi.service;
 
 import com.afs.restapi.entity.Company;
 import com.afs.restapi.entity.Employee;
+import com.afs.restapi.exception.NoCompanyFoundException;
 import com.afs.restapi.repository.CompanyRepository;
-import com.afs.restapi.repository.EmployeeRepository;
+import com.afs.restapi.repository.CompanyRepositoryInMongo;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,19 +12,22 @@ import java.util.List;
 @Service
 public class CompanyService {
   private final CompanyRepository companyRepository;
+  private final CompanyRepositoryInMongo companyRepositoryInMongo;
   private final EmployeeService employeeService;
 
-  public CompanyService(CompanyRepository companyRepository, EmployeeService employeeService) {
+  public CompanyService(CompanyRepository companyRepository, CompanyRepositoryInMongo companyRepositoryInMongo, EmployeeService employeeService) {
     this.companyRepository = companyRepository;
+    this.companyRepositoryInMongo = companyRepositoryInMongo;
     this.employeeService = employeeService;
   }
 
   public List<Company> findAll() {
-    return companyRepository.findAll();
+    return companyRepositoryInMongo.findAll();
   }
 
   public Company findById(String id) {
-    return companyRepository.findById(id);
+    return companyRepositoryInMongo.findById(id)
+      .orElseThrow(NoCompanyFoundException::new);
   }
 
   public List<Company> findByPage(Integer page, Integer pageSize) {

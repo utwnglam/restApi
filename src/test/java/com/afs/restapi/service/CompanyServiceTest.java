@@ -3,6 +3,7 @@ package com.afs.restapi.service;
 import com.afs.restapi.entity.Company;
 import com.afs.restapi.entity.Employee;
 import com.afs.restapi.repository.CompanyRepository;
+import com.afs.restapi.repository.CompanyRepositoryInMongo;
 import com.afs.restapi.repository.EmployeeRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,32 +26,37 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(SpringExtension.class)
 public class CompanyServiceTest {
   @Mock
-  EmployeeService employeeService;
-  @Mock
   CompanyRepository mockCompanyRepository;
+  @Mock
+  CompanyRepositoryInMongo mockCompanyRepositoryInMongo;
+
   @InjectMocks
   CompanyService companyService;
+  @InjectMocks
+  EmployeeService employeeService;
 
   @Test
   public void should_get_all_companies_when_GET_given_companies() {
     List<Company> companies = new ArrayList<>();
-    companies.add(new Company("1", "comm"));
-    given(mockCompanyRepository.findAll())
+    companies.add(new Company(null, "comm"));
+
+    given(mockCompanyRepositoryInMongo.findAll())
       .willReturn(companies);
 
     List<Company> actual = companyService.findAll();
 
-    assertEquals(companies, actual);
+    assertEquals(companies.get(0).getCompanyName(), actual.get(0).getCompanyName());
   }
 
   @Test
   public void should_return_company_when_get_given_ID() {
     Company company = new Company("1", "comm");
-    given(mockCompanyRepository.findById("1"))
-      .willReturn(company);
+    given(mockCompanyRepositoryInMongo.findById("1"))
+      .willReturn(java.util.Optional.of(company));
 
     Company actual = companyService.findById(company.getId());
-    assertEquals(company, actual);
+
+    assertEquals(company.getCompanyName(), actual.getCompanyName());
   }
 
   @Test
