@@ -58,10 +58,19 @@ public class CompanyControllerTest {
     Company company = new Company(1, "comm");
     companyRepository.create(company);
 
+    employeeRepository.create(new Employee(1, "Terence", 29, "Male", 66666, 1));
+    employeeRepository.create(new Employee(2, "Terence2", 28, "Male", 66666, 1));
+    employeeRepository.create(new Employee(3, "Terence3", 27, "Male", 66666, 2));
+
     mockMvc.perform(MockMvcRequestBuilders.get(COMPANIES_URL_BASE + "/" + company.getId()))
       .andExpect(status().isOk())
       .andExpect(jsonPath("$.id").isNumber())
-      .andExpect(jsonPath("$.companyName").value("comm"));
+      .andExpect(jsonPath("$.companyName").value("comm"))
+      .andExpect(jsonPath("$.employees[*].name").value(containsInAnyOrder("Terence", "Terence2")))
+      .andExpect(jsonPath("$.employees[*].age").value(containsInAnyOrder(28, 29)))
+      .andExpect(jsonPath("$.employees[*].gender").value(containsInAnyOrder("Male", "Male")))
+      .andExpect(jsonPath("$.employees[*].salary").value(containsInAnyOrder(66666, 66666)));
+    ;
   }
 
   @Test
@@ -88,13 +97,20 @@ public class CompanyControllerTest {
     //given
     companyRepository.create(new Company(1, "comm"));
     companyRepository.create(new Company(2, "comm2"));
+
+    employeeRepository.create(new Employee(1, "Terence", 29, "Male", 66666, 1));
+    employeeRepository.create(new Employee(2, "Terence2", 28, "Male", 66666, 1));
+    employeeRepository.create(new Employee(3, "Terence3", 27, "Male", 66666, 2));
+
     //when
     mockMvc.perform(MockMvcRequestBuilders.get(COMPANIES_URL_BASE + "?page=1&pageSize=2"))
       .andExpect(status().isOk())
       .andExpect(jsonPath("$", hasSize(2)))
       .andExpect(jsonPath("$[0].id").value(1))
       .andExpect(jsonPath("$[1].id").value(2))
-      .andExpect(jsonPath("$[*].companyName").value(containsInAnyOrder("comm", "comm2")));
+      .andExpect(jsonPath("$[*].companyName").value(containsInAnyOrder("comm", "comm2")))
+      .andExpect(jsonPath("$[0].employees", hasSize(2)))
+      .andExpect(jsonPath("$[1].employees", hasSize(1)));
   }
 
   @Test

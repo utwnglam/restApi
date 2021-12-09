@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(SpringExtension.class)
 public class CompanyServiceTest {
   @Mock
-  EmployeeRepository mockEmployeeRepository;
+  EmployeeService employeeService;
   @Mock
   CompanyRepository mockCompanyRepository;
   @InjectMocks
@@ -76,7 +76,7 @@ public class CompanyServiceTest {
 
     company.setEmployees(employees);
 
-    given(mockEmployeeRepository.findByCompanyId(company.getId()))
+    given(employeeService.findByCompanyId(company.getId()))
       .willReturn(employees);
 
     List<Employee> actual = companyService.findEmployeesByCompanyId(company.getId());
