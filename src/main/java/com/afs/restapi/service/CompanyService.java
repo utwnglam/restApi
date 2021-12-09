@@ -25,11 +25,15 @@ public class CompanyService {
   }
 
   public Company findById(Integer id) {
-    return companyRepository.findById(id);
+    Company company = companyRepository.findById(id);
+    company.setEmployees(findEmployeesByCompanyId(id));
+    return company;
   }
 
   public List<Company> findByPage(Integer page, Integer pageSize) {
-    return companyRepository.findByPageNumber(page, pageSize);
+    List<Company> companies = companyRepository.findByPageNumber(page, pageSize);
+    companies.forEach(company -> company.setEmployees(findEmployeesByCompanyId(company.getId())));
+    return companies;
   }
 
   public Company create(Company company) {
