@@ -61,11 +61,7 @@ public class CompanyControllerTest {
     mockMvc.perform(MockMvcRequestBuilders.get(COMPANIES_URL_BASE + "/" + company.getId()))
       .andExpect(status().isOk())
       .andExpect(jsonPath("$.id").isNumber())
-      .andExpect(jsonPath("$.companyName").value("comm"))
-      .andExpect(jsonPath("$.employees[*].name").value(containsInAnyOrder("Terence", "wh")))
-      .andExpect(jsonPath("$.employees[*].age").value(containsInAnyOrder(20, 29)))
-      .andExpect(jsonPath("$.employees[*].gender").value(containsInAnyOrder("Female", "Male")))
-      .andExpect(jsonPath("$.employees[*].salary").value(containsInAnyOrder(10000, 66666)));
+      .andExpect(jsonPath("$.companyName").value("comm"));
   }
 
   @Test
@@ -98,32 +94,14 @@ public class CompanyControllerTest {
       .andExpect(jsonPath("$", hasSize(2)))
       .andExpect(jsonPath("$[0].id").value(1))
       .andExpect(jsonPath("$[1].id").value(2))
-      .andExpect(jsonPath("$[*].companyName").value(containsInAnyOrder("comm", "comm2")))
-      .andExpect(jsonPath("$[0].employees", hasSize(2)))
-      .andExpect(jsonPath("$[1].employees", hasSize(2)));
+      .andExpect(jsonPath("$[*].companyName").value(containsInAnyOrder("comm", "comm2")));
   }
 
   @Test
   public void should_create_company_when_POST_given_company() throws Exception {
     String companyJsonString = "{\n" +
       "        \"id\": 1,\n" +
-      "        \"companyName\": \"cannotFindCompany222\",\n" +
-      "        \"employees\": [\n" +
-      "            {\n" +
-      "                \"id\": 1,\n" +
-      "                \"name\": \"who3\",\n" +
-      "                \"age\": 20,\n" +
-      "                \"gender\": \"Male\",\n" +
-      "                \"salary\": 1500\n" +
-      "            },\n" +
-      "            {\n" +
-      "                \"id\": 2,\n" +
-      "                \"name\": \"dearjane\",\n" +
-      "                \"age\": 29,\n" +
-      "                \"gender\": \"Female\",\n" +
-      "                \"salary\": 10000\n" +
-      "            }\n" +
-      "        ]\n" +
+      "        \"companyName\": \"cannotFindCompany222\"\n" +
       "    }";
 
     mockMvc.perform(MockMvcRequestBuilders.post(COMPANIES_URL_BASE)
@@ -131,12 +109,7 @@ public class CompanyControllerTest {
         .content(companyJsonString))
       .andExpect(status().isCreated())
       .andExpect(jsonPath("$.id").isNumber())
-      .andExpect(jsonPath("$.companyName").value("cannotFindCompany222"))
-      .andExpect(jsonPath("$.employees", hasSize(2)))
-      .andExpect(jsonPath("$.employees[*].name").value(containsInAnyOrder("who3", "dearjane")))
-      .andExpect(jsonPath("$.employees[*].age").value(containsInAnyOrder(20, 29)))
-      .andExpect(jsonPath("$.employees[*].gender").value(containsInAnyOrder("Female", "Male")))
-      .andExpect(jsonPath("$.employees[*].salary").value(containsInAnyOrder(10000, 1500)));
+      .andExpect(jsonPath("$.companyName").value("cannotFindCompany222"));
   }
 
   @Test
@@ -146,23 +119,7 @@ public class CompanyControllerTest {
 
     String updatedCompanyJson = "{\n" +
       "        \"id\": 1,\n" +
-      "        \"companyName\": \"cannotFindCompany222\",\n" +
-      "        \"employees\": [\n" +
-      "            {\n" +
-      "                \"id\": 1,\n" +
-      "                \"name\": \"who3\",\n" +
-      "                \"age\": 20,\n" +
-      "                \"gender\": \"Male\",\n" +
-      "                \"salary\": 1500\n" +
-      "            },\n" +
-      "            {\n" +
-      "                \"id\": 2,\n" +
-      "                \"name\": \"dearjane\",\n" +
-      "                \"age\": 29,\n" +
-      "                \"gender\": \"Female\",\n" +
-      "                \"salary\": 10000\n" +
-      "            }\n" +
-      "        ]\n" +
+      "        \"companyName\": \"cannotFindCompany222\"\n" +
       "    }";
 
     mockMvc.perform(MockMvcRequestBuilders.put(COMPANIES_URL_BASE + "/" + company.getId())

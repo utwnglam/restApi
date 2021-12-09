@@ -20,9 +20,7 @@ public class CompanyService {
 
   public List<Company> findAll() {
     List<Company> companies = companyRepository.findAll();
-    companies.forEach((company) -> {
-      company.setEmployees(findEmployeesByCompanyId(company.getId()));
-    });
+    companies.forEach(company -> company.setEmployees(findEmployeesByCompanyId(company.getId())));
     return companies;
   }
 

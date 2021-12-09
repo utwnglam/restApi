@@ -1,6 +1,5 @@
 package com.afs.restapi.controller;
 
-import com.afs.restapi.repository.CompanyRepository;
 import com.afs.restapi.entity.Company;
 import com.afs.restapi.entity.Employee;
 import com.afs.restapi.service.CompanyService;
