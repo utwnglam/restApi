@@ -2,6 +2,8 @@ package com.afs.restapi.service;
 
 import com.afs.restapi.entity.Company;
 import com.afs.restapi.entity.Employee;
+import com.afs.restapi.exception.NoCompanyFoundException;
+import com.afs.restapi.exception.NoEmployeeFoundException;
 import com.afs.restapi.repository.CompanyRepository;
 import com.afs.restapi.repository.CompanyRepositoryInMongo;
 import com.afs.restapi.repository.EmployeeRepository;
@@ -21,6 +23,7 @@ import java.util.List;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
@@ -73,6 +76,15 @@ public class CompanyServiceTest {
 
     assertEquals(companies.get(0).getCompanyName(), actual.get(0).getCompanyName());
     assertEquals(companies.get(1).getCompanyName(), actual.get(1).getCompanyName());
+  }
+
+  @Test
+  public void should_throw_exception_when_get_given_not_exist_company() {
+    Company company = new Company("1", "comm");
+    given(mockCompanyRepositoryInMongo.findById("1221"))
+      .willThrow(NoCompanyFoundException.class);
+
+    assertThrows(NoCompanyFoundException.class, () -> companyService.findById(company.getId()));
   }
 
   @Test

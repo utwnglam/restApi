@@ -1,6 +1,7 @@
 package com.afs.restapi.service;
 
 import com.afs.restapi.entity.Employee;
+import com.afs.restapi.exception.NoEmployeeFoundException;
 import com.afs.restapi.repository.EmployeeRepository;
 import com.afs.restapi.repository.EmployeeRepositoryInMongo;
 import org.junit.jupiter.api.Test;
@@ -16,7 +17,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
@@ -44,24 +45,6 @@ public class EmployeeServiceTest {
   }
 
   @Test
-  public void should_return_updated_employee_when_edit_given_updated_employee() {
-    Employee employee = new Employee("1", "Terence", 29, "Male", 66666, "1");
-    Employee updatedEmployee = new Employee("1", "Jooo", 19, "Female", 18888, "1");
-
-    given(mockEmployeeRepositoryInMongo.findById(any()))
-      .willReturn(java.util.Optional.of(employee));
-    employee.setAge(updatedEmployee.getAge());
-    employee.setSalary(updatedEmployee.getSalary());
-    given(mockEmployeeRepositoryInMongo.save(any(Employee.class)))
-      .willReturn(employee);
-
-    Employee actual = employeeService.edit(employee.getId(), updatedEmployee);
-
-    assertEquals(employee.getAge(), actual.getAge());
-    assertEquals(employee.getSalary(), actual.getSalary());
-  }
-
-  @Test
   public void should_return_employee_when_get_given_ID() {
     Employee employee = new Employee("1", "Terence", 29, "Male", 66666, "1");
     given(mockEmployeeRepositoryInMongo.findById("1"))
@@ -72,6 +55,15 @@ public class EmployeeServiceTest {
     assertEquals(employee.getName(), actual.getName());
     assertEquals(employee.getAge(), actual.getAge());
     assertEquals(employee.getGender(), actual.getGender());
+  }
+
+  @Test
+  public void should_throw_exception_when_get_given_not_exist_employee() {
+    Employee employee = new Employee("1", "Terence", 29, "Male", 66666, "1");
+    given(mockEmployeeRepositoryInMongo.findById("1221"))
+      .willThrow(NoEmployeeFoundException.class);
+
+    assertThrows(NoEmployeeFoundException.class, () -> employeeService.findById(employee.getId()));
   }
 
   @Test
@@ -147,6 +139,24 @@ public class EmployeeServiceTest {
     assertEquals(employee.getName(), actual.getName());
     assertEquals(employee.getAge(), actual.getAge());
     assertEquals(employee.getGender(), actual.getGender());
+  }
+
+  @Test
+  public void should_return_updated_employee_when_edit_given_updated_employee() {
+    Employee employee = new Employee("1", "Terence", 29, "Male", 66666, "1");
+    Employee updatedEmployee = new Employee("1", "Jooo", 19, "Female", 18888, "1");
+
+    given(mockEmployeeRepositoryInMongo.findById(any()))
+      .willReturn(java.util.Optional.of(employee));
+    employee.setAge(updatedEmployee.getAge());
+    employee.setSalary(updatedEmployee.getSalary());
+    given(mockEmployeeRepositoryInMongo.save(any(Employee.class)))
+      .willReturn(employee);
+
+    Employee actual = employeeService.edit(employee.getId(), updatedEmployee);
+
+    assertEquals(employee.getAge(), actual.getAge());
+    assertEquals(employee.getSalary(), actual.getSalary());
   }
 
   @Test
